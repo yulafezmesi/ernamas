@@ -1,0 +1,134 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/plugins",
+      "handler": "Admin.plugins",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currentEnvironment",
+      "handler": "Admin.getCurrentEnvironment",
+      "policies": []
+    },
+    {
+      "method": "GET",
+      "path": "/gaConfig",
+      "handler": "Admin.getGaConfig",
+      "policies": []
+    },
+    {
+      "method": "GET",
+      "path": "/strapiVersion",
+      "handler": "Admin.getStrapiVersion",
+      "policies": []
+    },
+    {
+      "method": "GET",
+      "path": "/layout",
+      "handler": "Admin.getLayout",
+      "policies": []
+    },
+    {
+      "method": "GET",
+      "path": "/init",
+      "handler": "Admin.init",
+      "policies": []
+    },
+    {
+      "method": "POST",
+      "path": "/plugins/install",
+      "handler": "Admin.installPlugin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plugins/uninstall/:plugin",
+      "handler": "Admin.uninstallPlugin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/local",
+      "handler": "Auth.callback"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/local/register",
+      "handler": "Auth.register"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/forgot-password",
+      "handler": "Auth.forgotPassword"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/reset-password",
+      "handler": "Auth.changePassword"
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "handler": "Webhooks.listWebhooks",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "handler": "Webhooks.createWebhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/:id",
+      "handler": "Webhooks.getWebhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/:id",
+      "handler": "Webhooks.updateWebhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/:id",
+      "handler": "Webhooks.deleteWebhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/batch-delete",
+      "handler": "Webhooks.deleteWebhooks",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/:id/trigger",
+      "handler": "Webhooks.triggerWebhook",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
