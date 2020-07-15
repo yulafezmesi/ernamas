@@ -13,17 +13,6 @@ const Form = () => {
     "cableWindingSerial",
   ];
 
-  useEffect(() => {
-    const loginUser = async () => {
-      const { data } = await axios.post("http://localhost:1337/auth/local", {
-        identifier: "user@user.com",
-        password: "111505",
-      });
-      localStorage.setItem("jwt", data.jwt);
-    };
-    loginUser();
-  }, []);
-
   const traceRefs = useRef(traces.map(() => createRef()));
   const initialState = {
     id: null,
@@ -54,29 +43,30 @@ const Form = () => {
     } catch (e) {}
   };
 
-  const updateTrace = () => {};
+  const getTraceByProductandFocus = async () => {
+    let data = await checkProductSerialAvaible(trace.productSerial.trim());
+    if (data.length) {
+      setCheckTrace(initialState);
+      setTrace(initialState);
+      setTrace(data[0]);
+      setCheckTrace(data[0]);
+      setIsLoading(false);
+      let { current } = traceRefs;
+      current[data[0].state.id].current.focus();
+      return data;
+    }
+  };
 
   const submitForm = async (e) => {
     e.preventDefault();
-
     try {
-      let data = await checkProductSerialAvaible(trace.productSerial.trim());
-      if (data.length) {
-        setCheckTrace(initialState);
-        setTrace(initialState);
-        setTrace(data[0]);
-        setCheckTrace(data[0]);
-        setIsLoading(false);
-        let { current } = traceRefs;
-        current[data[0].state.id].current.focus();
-      }
-      if (!data.length) {
+      let data = await getTraceByProductandFocus();
+      if (!data) {
         try {
           let { data } = await fetch("http://localhost:1337/traces", {
             method: "post",
             headers: {
               "content-type": "application/json",
-              authorization: `Bearer ${localStorage.getItem("jwt")}`,
             },
             body: JSON.stringify({
               productSerial: trace.productSerial,
@@ -86,6 +76,7 @@ const Form = () => {
         } catch (e) {
           console.log(e);
         }
+        let baboli = await getTraceByProductandFocus();
       }
     } catch (e) {
       console.log(e);
@@ -93,7 +84,7 @@ const Form = () => {
   };
   return (
     <div className="form-wrapper">
-      <State>Yeni Üretim</State>
+      {/* <State>Yeni Üretim</State> */}
       <nav>
         <img className="logo" src="/logo.png" alt="Ernataş Logo"></img>
       </nav>
