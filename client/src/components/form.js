@@ -1,7 +1,6 @@
-import React, { useState, useRef, createRef, useEffect } from "react";
-import { VerifiedUser, RestoreOutlined } from "@material-ui/icons";
+import React, { useState, useRef, createRef } from "react";
+import { ClearOutlined } from "@material-ui/icons";
 import State from "./state";
-import axios from "axios";
 
 const Form = () => {
   const BASE_URL = "http://localhost:1337";
@@ -23,27 +22,23 @@ const Form = () => {
     brushSerial: "",
     created_at: "",
     updated_at: "",
-    state: {
-      id: null,
-      state: "",
-      stateText: "",
-      created_at: "",
-      updated_at: "",
-    },
+    state: 1,
   };
   const [trace, setTrace] = useState(initialState);
   const [checkTrace, setCheckTrace] = useState(initialState);
   const [isLoading, setIsLoading] = useState(true);
+
   const checkProductSerialAvaible = async (productSerial) => {
     try {
-      let { data } = await axios.get(
+      let fetched = await fetch(
         `${BASE_URL}/traces?productSerial_eq=${productSerial}`
       );
+      let data = await fetched.json();
       return data;
     } catch (e) {}
   };
 
-  const getTraceByProductandFocus = async () => {
+  const getTraceByProductandSetTraces = async () => {
     let data = await checkProductSerialAvaible(trace.productSerial.trim());
     if (data.length) {
       setCheckTrace(initialState);
@@ -51,36 +46,87 @@ const Form = () => {
       setTrace(data[0]);
       setCheckTrace(data[0]);
       setIsLoading(false);
+      setFocus(data[0].state.id);
+    }
+    return data;
+  };
+
+  const setFocus = (index) => {
+    if (index <= 4) {
       let { current } = traceRefs;
-      current[data[0].state.id].current.focus();
-      return data;
+      current[index].current.focus();
+    }
+  };
+
+  const updateTraceByProduct = async () => {
+    console.log(+trace.state.id);
+    try {
+      let fetched = await fetch(`${BASE_URL}/traces/${+trace.id}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          productSerial: trace.productSerial,
+          engineSerial: trace.engineSerial,
+          motherboardSerial: trace.motherboardSerial,
+          cableWindingSerial: trace.cableWindingSerial,
+          brushSerial: trace.brushSerial,
+          state: +trace.state.id + 1,
+        }),
+      });
+      let data = await fetched.json();
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const addTrace = async () => {
+    try {
+      await fetch(`${BASE_URL}/traces`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          productSerial: trace.productSerial,
+          state: 1,
+        }),
+      });
+    } catch (e) {
+      alert(e);
     }
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
-    try {
-      let data = await getTraceByProductandFocus();
-      if (!data) {
-        try {
-          let { data } = await fetch("http://localhost:1337/traces", {
-            method: "post",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({
-              productSerial: trace.productSerial,
-              state: 1,
-            }),
-          });
-        } catch (e) {
-          console.log(e);
+    if (!trace.productSerial) return;
+    if (isLoading) {
+      try {
+        let data = await getTraceByProductandSetTraces(); //also set isLoading false
+        if (!data.length) {
+          await addTrace(); //Adding trace
+          await getTraceByProductandSetTraces(); //Getting items to added trace
+          setFocus(1); //Focusing next ref
         }
-        let baboli = await getTraceByProductandFocus();
+      } catch (e) {
+        alert(e);
       }
-    } catch (e) {
-      console.log(e);
+    } else {
+      try {
+        await updateTraceByProduct();
+        let data = await getTraceByProductandSetTraces(); //Getting items to added trace
+      } catch (e) {
+        alert(e);
+      }
     }
+  };
+
+  const resetState = () => {
+    setIsLoading(!isLoading);
+    setTrace(initialState);
+    setCheckTrace(initialState);
+    setFocus(0);
   };
   return (
     <div className="form-wrapper">
@@ -90,15 +136,25 @@ const Form = () => {
       </nav>
       <form onSubmit={(e) => submitForm(e)}>
         <label>Seri No</label>
-        <input
-          ref={traceRefs.current[0]}
-          onChange={(e) =>
-            setTrace({ ...trace, productSerial: e.target.value })
-          }
-          value={trace.productSerial}
-          autoFocus
-          type="text"
-        />
+        <div className="input-wrapper">
+          <input
+            ref={traceRefs.current[0]}
+            onChange={(e) =>
+              setTrace({ ...trace, productSerial: e.target.value })
+            }
+            value={trace.productSerial || ""}
+            autoFocus
+            type="text"
+          />
+          <ClearOutlined
+            onClick={() => resetState()}
+            style={{
+              position: "absolute",
+              right: 12,
+              color: "var(--danger)",
+            }}
+          ></ClearOutlined>
+        </div>
         <label>Motor Seri No</label>
         <div className="input-wrapper">
           <input
@@ -109,7 +165,7 @@ const Form = () => {
             onChange={(e) =>
               setTrace({ ...trace, engineSerial: e.target.value })
             }
-            value={trace.engineSerial}
+            value={trace.engineSerial || ""}
             type="text"
           />
         </div>
@@ -123,7 +179,7 @@ const Form = () => {
             onChange={(e) =>
               setTrace({ ...trace, brushSerial: e.target.value })
             }
-            value={trace.brushSerial}
+            value={trace.brushSerial || ""}
             type="text"
           />
         </div>
@@ -138,7 +194,7 @@ const Form = () => {
             onChange={(e) =>
               setTrace({ ...trace, motherboardSerial: e.target.value })
             }
-            value={trace.motherboardSerial}
+            value={trace.motherboardSerial || ""}
             type="text"
           />
         </div>
@@ -154,7 +210,7 @@ const Form = () => {
             onChange={(e) =>
               setTrace({ ...trace, cableWindingSerial: e.target.value })
             }
-            value={trace.cableWindingSerial}
+            value={trace.cableWindingSerial || ""}
             type="text"
           />
         </div>

@@ -1,8 +1,20 @@
-'use strict';
+// module.exports = {
+//   afterCreate(result) {
+//     console.log("afterCreate");
+//   },
+//   // Called before an entry is created
+//   beforeCreate(data) {
+//     console.log("beforeCreate");
+//   },
+//   beforeFetchAll: async (model) => {
+//     console.log("beforeFetchAll: ");
+//   },
 
-/**
- * Read the documentation (https://strapi.io/documentation/v3.x/concepts/models.html#lifecycle-hooks)
- * to customize this model
- */
+//   // After fetching all values.
+//   // Fired after a `fetchAll` operation.
+//   afterFetchAll: async (model, results) => {
+//     console.log("afterFetchAll: ");
+//   },
 
-module.exports = {};
+//   // Called after an entry is created
+// };

@@ -1,6 +1,6 @@
 :root {
   --info: rgb(0, 126, 255);
-  --yellow: #ED1C24;
+  --yellow: #ed1c24;
   --danger: rgb(237, 28, 36);
 }
 
@@ -51,7 +51,7 @@ nav {
   align-items: center;
   flex-direction: column;
   border: thin solid rgba(0, 0, 0, 0.12);
-  padding: 1rem;
+  padding: 0 1em 1em;
   margin: 1rem;
   position: relative;
 }
