@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/reworks",
+      "handler": "rework.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reworks/count",
+      "handler": "rework.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reworks/:id",
+      "handler": "rework.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reworks",
+      "handler": "rework.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reworks/:id",
+      "handler": "rework.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reworks/:id",
+      "handler": "rework.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

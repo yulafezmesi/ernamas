@@ -1,24 +1,24 @@
 {
   "kind": "collectionType",
-  "collectionName": "states",
+  "collectionName": "reworks",
   "info": {
-    "name": "state"
+    "name": "rework"
   },
   "options": {
     "increments": true,
     "timestamps": true
   },
   "attributes": {
-    "state": {
-      "type": "string",
-      "private": false,
-      "required": true,
-      "unique": true
-    },
-    "text": {
+    "old_value": {
       "type": "string"
     },
-    "endsWith": {
+    "new_value": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "productSerial": {
       "type": "string"
     }
   }

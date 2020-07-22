@@ -29,6 +29,9 @@
     },
     "state": {
       "model": "state"
+    },
+    "control": {
+      "type": "string"
     }
   }
 }
